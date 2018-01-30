@@ -8,7 +8,7 @@ Collect videos and metadata from a vimeo account.
 `> pip install PyVimeo`
 
 
-## Use
+## Execution
 `> workon vimeo`
 
 `> python script.py`
