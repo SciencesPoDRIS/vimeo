@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Execution example : python script.py
-# Documentation : https://developer.vimeo.com/api/start
-# Inspiration : https://github.com/yeeking/vimeo-account-downloader/blob/master/vimeo_backup.py
 
 
 #
