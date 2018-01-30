@@ -1,16 +1,22 @@
 # vimeo
 Collect videos and metadata from a vimeo account.
 
+
 ## Install
-> mkvirtualenv vimeo
-> pip install PyVimeo
+`> mkvirtualenv vimeo`
+
+`> pip install PyVimeo`
+
 
 ## Use
-> workon vimeo
-> python script.py
+`> workon vimeo`
+
+`> python script.py`
+
 
 ## Credits
 [Sciences Po - Library](http://www.sciencespo.fr/bibliotheque/en)
+
 
 ## Licenses
 [LGPL V3.0](http://www.gnu.org/licenses/lgpl.txt "LGPL V3.0")
