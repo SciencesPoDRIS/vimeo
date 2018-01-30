@@ -1,7 +1,13 @@
 # vimeo
-
-## Purpose
 Collect videos and metadata from a vimeo account.
+
+## Install
+> mkvirtualenv vimeo
+> pip install PyVimeo
+
+## Use
+> workon vimeo
+> python script.py
 
 ## Credits
 [Sciences Po - Library](http://www.sciencespo.fr/bibliotheque/en)
