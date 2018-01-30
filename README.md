@@ -1,4 +1,4 @@
-# vimeo
+# Vimeo
 Collect videos and metadata from a vimeo account.
 
 
