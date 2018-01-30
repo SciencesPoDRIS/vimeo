@@ -7,3 +7,9 @@
 # Log files
 #
 *.log
+
+
+#
+# Conf files
+#
+conf.json
