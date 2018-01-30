@@ -8,8 +8,12 @@
 #
 *.log
 
-
 #
 # Conf files
 #
 conf.json
+
+#
+# Videos folder
+#
+videos
