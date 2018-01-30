@@ -1,5 +1,8 @@
 # vimeo
 
+## Purpose
+Collect videos and metadata from a vimeo account.
+
 ## Credits
 [Sciences Po - Library](http://www.sciencespo.fr/bibliotheque/en)
 
