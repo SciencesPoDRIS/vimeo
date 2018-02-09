@@ -79,7 +79,7 @@ def retrieve_videos(v) :
 		# 	break
 		# print "Getting next... " + next
 		# vids = v.get(next).json()
-	download_videos(all_data)
+	# download_videos(all_data)
 
 def main() :
 	# Load conf file
@@ -95,14 +95,15 @@ def main() :
 	if not os.path.isdir(videos_folder) :
 		logging.info('Create videos folder')
 		os.mkdir(videos_folder)
-	# Connect to Vimeo account
-	logging.info('Connect to Vimeo account')
-	v = vimeo.VimeoClient(
-		token = conf['token'],
-		key = conf['key'],
-		secret = conf['secret']
-	)
-	retrieve_videos(v)
+	for account in conf :
+		# Connect to Vimeo account
+		logging.info('Connect to Vimeo account')
+		v = vimeo.VimeoClient(
+			token = account['token'],
+			key = account['key'],
+			secret = account['secret']
+		)
+		retrieve_videos(v)
 
 #
 # Main
