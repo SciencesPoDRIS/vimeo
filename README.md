@@ -6,7 +6,7 @@ Collect metadata and download videos from multiple vimeo accounts.
 Create a dedicated virtualenv
 `> mkvirtualenv vimeo`
 
-Install PyVimeo lib
+Install [PyVimeo lib](https://github.com/vimeo/vimeo.py)
 `> pip install PyVimeo`
 
 Copy the default conf file
@@ -29,6 +29,14 @@ The freshly generated "Token" will be your secret.
 `> workon vimeo`
 
 `> python script.py`
+
+
+## Documentation
+https://developer.vimeo.com/api/start
+@
+
+## Inspiration
+https://github.com/yeeking/vimeo-account-downloader/blob/master/vimeo_backup.py
 
 
 ## Credits
