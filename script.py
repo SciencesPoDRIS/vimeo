@@ -61,6 +61,9 @@ def download_videos(all_data) :
         id = videoset['uri'].split('/')[-1]
         title = videoset['name']
         file = get_biggest_video(videoset)
+        if file == None :
+            logging.error('No videos for some reason... skipping : ' + str(id))
+            continue
         filepath = os.path.join(videos_folder, id + '.' + file['type'].split('/')[-1])
         total_size += file['size']
         # If this file is already downloaded, skip this step, otherwise download it
@@ -99,16 +102,17 @@ def main() :
         os.mkdir(videos_folder)
     # Init total size
     total_size = 0
-    # Connect to Vimeo account
-    logging.info('Connect to Vimeo account')
-    v = vimeo.VimeoClient(
-        token = conf['token'],
-        key = conf['key'],
-        secret = conf['secret']
-    )
-    retrieve_videos(v)
-    print total_size
-    logging.info('Total size : ' + str(total_size))
+    # Iterate over all the vimeo accounts
+    for account in conf :
+        # Connect to Vimeo account
+        logging.info('Connect to Vimeo account')
+        v = vimeo.VimeoClient(
+            token = account['token'],
+            key = account['key'],
+            secret = account['secret']
+        )
+        retrieve_videos(v)
+    logging.info('Total size : ' + str(total_size) + ' octets.')
 
 
 #
