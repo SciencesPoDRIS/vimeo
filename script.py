@@ -11,6 +11,7 @@ import logging
 import os
 import re
 import requests
+import urllib2
 import vimeo
 
 
@@ -20,8 +21,8 @@ import vimeo
 log_file = 'script.log'
 log_level = logging.DEBUG
 conf_file = 'conf.json'
-videos_folder = 'videos'
 total_size = 0
+conf = 0
 
 
 #
@@ -29,7 +30,6 @@ total_size = 0
 #
 def download_file(url, local_filename):
     logging.info('Downloading ' + url + ' to ' + local_filename)
-    #local_filename = url.split('/')[-1]
     # NOTE the stream=True parameter
     # r = requests.get(url, stream=True)
     # with open(local_filename, 'wb') as f:
@@ -37,6 +37,10 @@ def download_file(url, local_filename):
     #         if chunk: # filter out keep-alive new chunks
     #             f.write(chunk)
     #             #f.flush() commented by recommendation from J.F.Sebastian
+    # return local_filename
+    videoFile = urllib2.urlopen(url)
+    with open(local_filename, 'wb') as output :
+        output.write(videoFile.read())
     return local_filename
 
 def get_biggest_video(videoset):
@@ -63,7 +67,7 @@ def download_videos(all_data) :
         if file == None :
             logging.error('No videos for some reason... skipping : ' + str(id))
             continue
-        filepath = os.path.join(videos_folder, id + '.' + file['type'].split('/')[-1])
+        filepath = os.path.join(conf['download_path'], id + '.' + file['type'].split('/')[-1])
         total_size += file['size']
         # If this file is already downloaded, skip this step, otherwise download it
         if os.path.exists(filepath):
@@ -85,7 +89,7 @@ def retrieve_videos(v) :
     download_videos(all_data)
 
 def main() :
-    global total_size
+    global total_size, conf
     # Load conf file
     if os.path.exists(conf_file) :
         with open(conf_file) as f :
@@ -94,15 +98,18 @@ def main() :
     else :
         logging.error('No conf file provided or wrong file name : ' + conf_file)
         sys.exit(0)
-    # Check that videos_folder exists, otherwise create it
-    if not os.path.isdir(videos_folder) :
-        logging.info('Create videos folder')
-        os.mkdir(videos_folder)
+    # Check that the download_path exists into conf file
+    if 'download_path' in conf.keys() :
+        logging.info('Download path provided')
+    else :
+        logging.error('Please provide an existing download path into the conf file !')
+        sys.exit(0)
     # Init total size
     total_size = 0
-    if 'authentificatons' in conf.keys() :
+    if 'authentifications' in conf.keys() :
+        logging.info('Authentifications provided')
         # Iterate over all the vimeo accounts
-        for account in conf :
+        for account in conf['authentifications'] :
             # Connect to Vimeo account
             logging.info('Connect to Vimeo account')
             v = vimeo.VimeoClient(
@@ -122,7 +129,7 @@ def main() :
 #
 if __name__ == '__main__' :
     # Init logs
-    logging.basicConfig(filename = log_file, filemode = 'w+', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+    logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
     logging.info('Start')
     main()
     logging.info('End')
