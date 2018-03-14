@@ -1,5 +1,7 @@
-[{
-	"token" : "paste_your_token_here",
-	"key" : "paste_your_key_here",
-	"secret" : "paste_your_secret_here"
-}]
+{
+	"authentificatons" : [{
+		"token" : "paste_your_token_here",
+		"key" : "paste_your_key_here",
+		"secret" : "paste_your_secret_here"
+	}]
+}

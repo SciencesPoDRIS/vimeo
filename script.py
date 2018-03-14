@@ -52,7 +52,6 @@ def get_biggest_video(videoset):
             return res
     else :
         logging.error('No files key in metadata dict for video ' + videoset['uri'])
-        # print 'No files key in metadata dict for video ' + videoset['uri']
 
 def download_videos(all_data) :
     global total_size
@@ -94,7 +93,6 @@ def main() :
         logging.info('Conf file loaded')
     else :
         logging.error('No conf file provided or wrong file name : ' + conf_file)
-        print 'No conf file provided or wrong file name : ' + conf_file
         sys.exit(0)
     # Check that videos_folder exists, otherwise create it
     if not os.path.isdir(videos_folder) :
@@ -102,17 +100,21 @@ def main() :
         os.mkdir(videos_folder)
     # Init total size
     total_size = 0
-    # Iterate over all the vimeo accounts
-    for account in conf :
-        # Connect to Vimeo account
-        logging.info('Connect to Vimeo account')
-        v = vimeo.VimeoClient(
-            token = account['token'],
-            key = account['key'],
-            secret = account['secret']
-        )
-        retrieve_videos(v)
-    logging.info('Total size : ' + str(total_size) + ' octets.')
+    if 'authentificatons' in conf.keys() :
+        # Iterate over all the vimeo accounts
+        for account in conf :
+            # Connect to Vimeo account
+            logging.info('Connect to Vimeo account')
+            v = vimeo.VimeoClient(
+                token = account['token'],
+                key = account['key'],
+                secret = account['secret']
+            )
+            retrieve_videos(v)
+        logging.info('Total size : ' + str(total_size) + ' octets.')
+    else :
+        logging.error('Please provide authentification into the conf file !')
+        sys.exit(0)
 
 
 #
