@@ -26,7 +26,7 @@ conf = 0
 #
 # Functions
 #
-def download_file(url, local_filename) :
+def download_video(url, local_filename) :
     logging.info('Downloading ' + url + ' to ' + local_filename)
     videoFile = urllib2.urlopen(url)
     with open(local_filename, 'wb') as output :
@@ -69,7 +69,7 @@ def download_videos(all_data) :
         if os.path.exists(filepath):
             logging.info('Already downloaded ' + filepath + ' probably - skipping. Might want to delete it to force download though!')
         else :
-            download_file(file['link'], filepath)
+            download_video(file['link'], filepath)
 
 def retrieve_videos(v) :
     # Retrieve all videos from this account
