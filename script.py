@@ -9,8 +9,6 @@
 import json
 import logging
 import os
-import re
-import requests
 import urllib2
 import vimeo
 
@@ -30,18 +28,9 @@ conf = 0
 #
 def download_file(url, local_filename):
     logging.info('Downloading ' + url + ' to ' + local_filename)
-    # NOTE the stream=True parameter
-    # r = requests.get(url, stream=True)
-    # with open(local_filename, 'wb') as f:
-    #     for chunk in r.iter_content(chunk_size=1024):
-    #         if chunk: # filter out keep-alive new chunks
-    #             f.write(chunk)
-    #             #f.flush() commented by recommendation from J.F.Sebastian
-    # return local_filename
     videoFile = urllib2.urlopen(url)
     with open(local_filename, 'wb') as output :
         output.write(videoFile.read())
-    return local_filename
 
 def get_biggest_video(videoset):
     max = 0
