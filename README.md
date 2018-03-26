@@ -2,14 +2,22 @@
 Collect metadata and download videos from multiple vimeo accounts.
 
 
+## Dependencies
+
+[PyVimeo lib](https://github.com/vimeo/vimeo.py)
+
+
 ## Install
 Create a dedicated virtualenv
+
 `> mkvirtualenv vimeo`
 
-Install [PyVimeo lib](https://github.com/vimeo/vimeo.py)
-`> pip install PyVimeo`
+Install dependencies
+
+`> pip install -r requirements.txt`
 
 Copy the default conf file
+
 `> cp conf.default.json conf.json`
 
 Complete your conf.json file and add as many object as you need.
