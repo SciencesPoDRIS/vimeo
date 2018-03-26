@@ -17,3 +17,13 @@ conf.json
 # Videos folder
 #
 videos
+
+#
+# Metadata folder
+#
+metadata
+
+#
+# Blacklist file
+#
+blacklist
