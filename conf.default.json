@@ -4,5 +4,6 @@
 		"key" : "paste_your_key_here",
 		"secret" : "paste_your_secret_here"
 	}],
-	"download_path_video" : "/path/to/video/download/folder"
+	"download_path_video" : "/path/to/video/download/folder",
+	"download_path_metadata" : "/path/to/metadata/download/folder"
 }

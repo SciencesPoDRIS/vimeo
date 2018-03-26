@@ -47,7 +47,7 @@ def get_biggest_video(videoset) :
         logging.error('No files key in metadata dict for video ' + videoset['uri'])
 
 def download_metadata(id, metadata) :
-    metadata_file_name = str(id) + '.json'
+    metadata_file_name = os.path.join(conf['download_path_metadata'], str(id) + '.json')
     with open(metadata_file_name, 'w') as json_file :
         json.dumps(metadata, json_file, ensure_ascii=False, indent=4).encode('utf8')
 
@@ -96,17 +96,30 @@ def main() :
         sys.exit(0)
     # Check that the download_path_video exists into conf file
     if 'download_path_video' in conf.keys() :
-        logging.info('Download path provided')
+        logging.info('Download path video provided')
     else :
         logging.error('Please provide a download path names "download_path_video" into the conf file !')
         sys.exit(0)
     # Check that the download_path_video exists and is a folder
     if os.path.exists(conf['download_path_video']) and os.path.isdir(conf['download_path_video']) :
-        logging.info('Download path exists')
-    # Else create it
+        logging.info('Download path video exists')
+    # Otherwise create it
     else :
-        logging.info('Create download path : ' + str(conf['download_path_video']))
+        logging.info('Create download path video : ' + str(conf['download_path_video']))
         os.mkdir(conf['download_path_video'])
+    # Check that the download_path_metadata exists into conf file
+    if 'download_path_metadata' in conf.keys() :
+        logging.info('Download path metadata provided')
+    else :
+        logging.error('Please provide a download path names "download_path_metadata" into the conf file !')
+        sys.exit(0)
+    # Check that the download_path_metadata exists and is a folder
+    if os.path.exists(conf['download_path_metadata']) and os.path.isdir(conf['download_path_metadata']) :
+        logging.info('Download path metadata exists')
+    # Otherwise create it
+    else :
+        logging.info('Create download path metadata : ' + str(conf['download_path_metadata']))
+        os.mkdir(conf['download_path_metadata'])
     # Init total size
     total_size = 0
     if 'authentifications' in conf.keys() :
