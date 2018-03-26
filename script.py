@@ -53,23 +53,32 @@ def download_metadata(id, metadata) :
 
 def download_videos(all_data) :
     global total_size
-    logging.info('Download the largest file associated with each video into the videos folder')
+    # Load the blacklisted videos
+    blacklist = open('blacklist', 'r') 
+    with open('blacklist') as blacklist_file :
+        blacklist_ids = blacklist_file.read().splitlines()
     for videoset in all_data :
         id = videoset['uri'].split('/')[-1]
-        # Download the metadatas from a video into a separated file named ${video_id}.json
-        download_metadata(id, videoset)
-        title = videoset['name']
-        file = get_biggest_video(videoset)
-        if file == None :
-            logging.error('No videos for some reason... skipping : ' + str(id))
-            continue
-        filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
-        total_size += file['size']
-        # If this file is already downloaded, skip this step, otherwise download it
-        if os.path.exists(filepath):
-            logging.info('Already downloaded ' + filepath + ' probably - skipping. Might want to delete it to force download though!')
+        # Check if video id is not blacklisted aka already dowloaded
+        if not id in blacklist_ids :
+            # Download the metadatas from a video into a separated file named ${video_id}.json
+            download_metadata(id, videoset)
+            title = videoset['name']
+            file = get_biggest_video(videoset)
+            if file == None :
+                logging.error('No videos for some reason... skipping : ' + str(id))
+                continue
+            filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
+            total_size += file['size']
+            # If this file is already downloaded, skip this step, otherwise download it
+            if os.path.exists(filepath):
+                logging.info('Already downloaded ' + filepath + ' probably - skipping. Might want to delete it to force download though!')
+            else :
+                download_video(file['link'], filepath)
+            with open('blacklist', 'a') as blacklist_file:
+                blacklist_file.write(id + '\n')
         else :
-            download_video(file['link'], filepath)
+            logging.error('Video blacklisted : ' + str(id))
 
 def retrieve_videos(v) :
     # Retrieve all videos from this account
@@ -120,6 +129,19 @@ def main() :
     else :
         logging.info('Create download path metadata : ' + str(conf['download_path_metadata']))
         os.mkdir(conf['download_path_metadata'])
+    # Check that the blacklist_file exists into conf file
+    if 'blacklist_file' in conf.keys() :
+        logging.info('Blacklist file provided')
+    else :
+        logging.error('Please provide a blacklist file names "blacklist_file" into the conf file !')
+        sys.exit(0)
+    # Check that the blacklist_file exists and is a file
+    if os.path.exists(conf['blacklist_file']) and os.path.isfile(conf['blacklist_file']) :
+        logging.info('Blacklist file exists')
+    # Otherwise create it
+    else :
+        logging.info('Create blacklist file : ' + str(conf['blacklist_file']))
+        f = open(conf['blacklist_file'], 'w+')
     # Init total size
     total_size = 0
     if 'authentifications' in conf.keys() :
