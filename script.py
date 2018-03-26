@@ -26,13 +26,13 @@ conf = 0
 #
 # Functions
 #
-def download_file(url, local_filename):
+def download_file(url, local_filename) :
     logging.info('Downloading ' + url + ' to ' + local_filename)
     videoFile = urllib2.urlopen(url)
     with open(local_filename, 'wb') as output :
         output.write(videoFile.read())
 
-def get_biggest_video(videoset):
+def get_biggest_video(videoset) :
     max = 0
     if 'files' in videoset :
         for file in videoset['files'] :
@@ -46,11 +46,18 @@ def get_biggest_video(videoset):
     else :
         logging.error('No files key in metadata dict for video ' + videoset['uri'])
 
+def download_metadata(id, metadata) :
+    metadata_file_name = str(id) + '.json'
+    with open(metadata_file_name, 'w') as json_file :
+        json.dumps(metadata, json_file, ensure_ascii=False, indent=4).encode('utf8')
+
 def download_videos(all_data) :
     global total_size
     logging.info('Download the largest file associated with each video into the videos folder')
     for videoset in all_data :
         id = videoset['uri'].split('/')[-1]
+        # Download the metadatas from a video into a separated file named ${video_id}.json
+        download_metadata(id, videoset)
         title = videoset['name']
         file = get_biggest_video(videoset)
         if file == None :
