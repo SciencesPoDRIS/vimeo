@@ -63,7 +63,7 @@ def download_videos(all_data) :
         if file == None :
             logging.error('No videos for some reason... skipping : ' + str(id))
             continue
-        filepath = os.path.join(conf['download_path'], id + '.' + file['type'].split('/')[-1])
+        filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
         total_size += file['size']
         # If this file is already downloaded, skip this step, otherwise download it
         if os.path.exists(filepath):
@@ -94,12 +94,19 @@ def main() :
     else :
         logging.error('No conf file provided or wrong file name : ' + conf_file)
         sys.exit(0)
-    # Check that the download_path exists into conf file
-    if 'download_path' in conf.keys() :
+    # Check that the download_path_video exists into conf file
+    if 'download_path_video' in conf.keys() :
         logging.info('Download path provided')
     else :
-        logging.error('Please provide an existing download path into the conf file !')
+        logging.error('Please provide a download path names "download_path_video" into the conf file !')
         sys.exit(0)
+    # Check that the download_path_video exists and is a folder
+    if os.path.exists(conf['download_path_video']) and os.path.isdir(conf['download_path_video']) :
+        logging.info('Download path exists')
+    # Else create it
+    else :
+        logging.info('Create download path : ' + str(conf['download_path_video']))
+        os.mkdir(conf['download_path_video'])
     # Init total size
     total_size = 0
     if 'authentifications' in conf.keys() :
