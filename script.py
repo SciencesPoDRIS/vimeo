@@ -49,7 +49,7 @@ def get_biggest_video(videoset) :
 def download_metadata(id, metadata) :
     metadata_file_name = os.path.join(conf['download_path_metadata'], str(id) + '.json')
     with open(metadata_file_name, 'w') as json_file :
-        json.dumps(metadata, json_file, ensure_ascii=False, indent=4).encode('utf8')
+        json.dump(metadata, json_file, indent=4)
 
 def download_videos(all_data) :
     global total_size
