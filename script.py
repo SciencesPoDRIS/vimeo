@@ -29,8 +29,10 @@ conf = 0
 def download_video(url, local_filename) :
     logging.info('Downloading ' + url + ' to ' + local_filename)
     videoFile = urllib2.urlopen(url)
-    with open(local_filename, 'wb') as output :
-        output.write(videoFile.read())
+    CHUNK = 16 * 1024
+    with open(local_filename, 'wb') as f:
+        for chunk in iter(lambda: videoFile.read(CHUNK), '') :
+            f.write(chunk)
 
 def get_biggest_video(videoset) :
     max = 0
