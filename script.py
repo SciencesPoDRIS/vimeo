@@ -74,9 +74,9 @@ def download_videos(all_data) :
             total_size += file['size']
             # If this file is already downloaded, skip this step, otherwise download it
             if os.path.exists(filepath):
-                logging.info('Already downloaded ' + filepath + ' probably - skipping. Might want to delete it to force download though!')
-            else :
-                download_video(file['link'], filepath)
+                logging.info('Delete file before new download.')
+                os.remove(filepath)
+            download_video(file['link'], filepath)
             with open('blacklist', 'a') as blacklist_file:
                 blacklist_file.write(id + '\n')
         else :
@@ -93,6 +93,10 @@ def retrieve_videos(v) :
     while len(all_data) < total :
         logging.info('Total videos :' + str(len(all_data)) + ' of ' + str(total))
         all_data.extend(vids['data'])
+        next = vids['paging']['next']
+        if next == None :
+            break
+        vids = v.get(next).json()
     download_videos(all_data)
 
 def main() :
@@ -149,15 +153,15 @@ def main() :
     if 'authentifications' in conf.keys() :
         logging.info('Authentifications provided')
         # Iterate over all the vimeo accounts
-        for account in conf['authentifications'] :
-            # Connect to Vimeo account
-            logging.info('Connect to Vimeo account')
-            v = vimeo.VimeoClient(
-                token = account['token'],
-                key = account['key'],
-                secret = account['secret']
-            )
-            retrieve_videos(v)
+        # for account in conf['authentifications'] :
+        # Connect to Vimeo account
+        logging.info('Connect to Vimeo account ' + conf['authentifications'][0]['name'] + '.')
+        v = vimeo.VimeoClient(
+            token = conf['authentifications'][0]['token'],
+            key = conf['authentifications'][0]['key'],
+            secret = conf['authentifications'][0]['secret']
+        )
+        retrieve_videos(v)
         logging.info('Total size : ' + str(total_size) + ' octets.')
     else :
         logging.error('Please provide authentification into the conf file !')
