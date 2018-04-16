@@ -53,7 +53,7 @@ def download_metadata(id, metadata) :
     with open(metadata_file_name, 'w') as json_file :
         json.dump(metadata, json_file, indent=4)
 
-def download_videos(all_data) :
+def download_videos(all_data, user_link) :
     global total_size
     # Load the blacklisted videos
     blacklist = open('blacklist', 'r') 
@@ -63,26 +63,32 @@ def download_videos(all_data) :
         id = videoset['uri'].split('/')[-1]
         # Check if video id is not blacklisted aka already dowloaded
         if not id in blacklist_ids :
-            # Download the metadatas from a video into a separated file named ${video_id}.json
-            download_metadata(id, videoset)
-            title = videoset['name']
-            file = get_biggest_video(videoset)
-            if file == None :
-                logging.error('No videos for some reason... skipping : ' + str(id))
-                continue
-            filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
-            total_size += file['size']
-            # If this file is already downloaded, skip this step, otherwise download it
-            if os.path.exists(filepath):
-                logging.info('Delete file before new download.')
-                os.remove(filepath)
-            download_video(file['link'], filepath)
-            with open('blacklist', 'a') as blacklist_file:
-                blacklist_file.write(id + '\n')
+            # Check that the user link is as intended
+            if videoset['user']['link'] == user_link :
+                # Download the metadatas from a video into a separated file named ${video_id}.json
+                download_metadata(id, videoset)
+                title = videoset['name']
+                file = get_biggest_video(videoset)
+                if file == None :
+                    logging.error('No videos for some reason... skipping : ' + str(id))
+                    continue
+                filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
+                total_size += file['size']
+                # If this file is already downloaded, skip this step, otherwise download it
+                if os.path.exists(filepath):
+                    logging.info('File already exists')
+                    # logging.info('Delete file before new download.')
+                    # os.remove(filepath)
+                else :
+                    download_video(file['link'], filepath)
+                with open('blacklist', 'a') as blacklist_file:
+                    blacklist_file.write(id + '\n')
+            else :
+                logging.error('Video ' + str(id) + ' doesn\'t belong to user ' + user_link + ' but to user ' + videoset['user']['link'])
         else :
             logging.error('Video blacklisted : ' + str(id))
 
-def retrieve_videos(v) :
+def retrieve_videos(v, user_link) :
     # Retrieve all videos from this account
     logging.info('Retrieve all videos from this account')
     videos_url = '/me/videos'
@@ -97,7 +103,7 @@ def retrieve_videos(v) :
         if next == None :
             break
         vids = v.get(next).json()
-    download_videos(all_data)
+    download_videos(all_data, user_link)
 
 def main() :
     global total_size, conf
@@ -155,13 +161,13 @@ def main() :
         # Iterate over all the vimeo accounts
         # for account in conf['authentifications'] :
         # Connect to Vimeo account
-        logging.info('Connect to Vimeo account ' + conf['authentifications'][0]['name'] + '.')
+        logging.info('Connect to Vimeo account ' + conf['authentifications'][2]['name'] + '.')
         v = vimeo.VimeoClient(
-            token = conf['authentifications'][0]['token'],
-            key = conf['authentifications'][0]['key'],
-            secret = conf['authentifications'][0]['secret']
+            token = conf['authentifications'][2]['token'],
+            key = conf['authentifications'][2]['key'],
+            secret = conf['authentifications'][2]['secret']
         )
-        retrieve_videos(v)
+        retrieve_videos(v, conf['authentifications'][2]['link'])
         logging.info('Total size : ' + str(total_size) + ' octets.')
     else :
         logging.error('Please provide authentification into the conf file !')
