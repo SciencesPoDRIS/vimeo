@@ -27,12 +27,16 @@ conf = 0
 # Functions
 #
 def download_video(url, local_filename) :
-    logging.info('Downloading ' + url + ' to ' + local_filename)
-    videoFile = urllib2.urlopen(url)
-    CHUNK = 16 * 1024
-    with open(local_filename, 'wb') as f:
-        for chunk in iter(lambda: videoFile.read(CHUNK), '') :
-            f.write(chunk)
+    # If this file is already downloaded, skip this step, otherwise download it
+    if os.path.exists(local_filename) :
+        logging.info('Video file already exists : ' + local_filename)
+    else :
+        logging.info('Downloading ' + url + ' to ' + local_filename)
+        videoFile = urllib2.urlopen(url)
+        CHUNK = 16 * 1024
+        with open(local_filename, 'wb') as f:
+            for chunk in iter(lambda: videoFile.read(CHUNK), '') :
+                f.write(chunk)
 
 def get_biggest_video(videoset) :
     max = 0
@@ -50,8 +54,12 @@ def get_biggest_video(videoset) :
 
 def download_metadata(id, metadata) :
     metadata_file_name = os.path.join(conf['download_path_metadata'], str(id) + '.json')
-    with open(metadata_file_name, 'w') as json_file :
-        json.dump(metadata, json_file, indent=4)
+    # If this file is already downloaded, skip this step, otherwise download it
+    if os.path.exists(metadata_file_name) :
+        logging.info('Metadata file already exists : ' + metadata_file_name)
+    else :
+        with open(metadata_file_name, 'w') as json_file :
+            json.dump(metadata, json_file, indent=4)
 
 def download_videos(all_data, user_link) :
     global total_size
@@ -65,22 +73,15 @@ def download_videos(all_data, user_link) :
         if not id in blacklist_ids :
             # Check that the user link is as intended
             if videoset['user']['link'] == user_link :
-                # Download the metadatas from a video into a separated file named ${video_id}.json
-                download_metadata(id, videoset)
-                title = videoset['name']
                 file = get_biggest_video(videoset)
                 if file == None :
                     logging.error('No videos for some reason... skipping : ' + str(id))
                     continue
+                # Download the metadatas from a video into a separated file named ${video_id}.json
+                download_metadata(id, videoset)
                 filepath = os.path.join(conf['download_path_video'], id + '.' + file['type'].split('/')[-1])
                 total_size += file['size']
-                # If this file is already downloaded, skip this step, otherwise download it
-                if os.path.exists(filepath):
-                    logging.info('File already exists')
-                    # logging.info('Delete file before new download.')
-                    # os.remove(filepath)
-                else :
-                    download_video(file['link'], filepath)
+                download_video(file['link'], filepath)
                 with open('blacklist', 'a') as blacklist_file:
                     blacklist_file.write(id + '\n')
             else :
