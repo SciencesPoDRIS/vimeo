@@ -32,11 +32,18 @@ def download_video(url, local_filename) :
         logging.info('Video file already exists : ' + local_filename)
     else :
         logging.info('Downloading ' + url + ' to ' + local_filename)
-        videoFile = urllib2.urlopen(url)
-        CHUNK = 16 * 1024
-        with open(local_filename, 'wb') as f:
-            for chunk in iter(lambda: videoFile.read(CHUNK), '') :
-                f.write(chunk)
+        try :
+            videoFile = urllib2.urlopen(url)
+            CHUNK = 16 * 1024
+            with open(local_filename, 'wb') as f:
+                for chunk in iter(lambda: videoFile.read(CHUNK), '') :
+                    f.write(chunk)
+        except urllib2.HTTPError as err :
+            logging.error('Failed to open "%s".' % url)
+            if hasattr(err, 'code'):
+                logging.error('It failed with error code - %s.' % err.code)
+            elif hasattr(err, 'reason'):
+                logging.error('It failed with error reason - %s.' % err.reason)
 
 def get_biggest_video(videoset) :
     max = 0
