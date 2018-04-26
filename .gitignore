@@ -27,3 +27,8 @@ metadata
 # Blacklist file
 #
 blacklist
+
+#
+# Output file
+#
+check_videos.csv
