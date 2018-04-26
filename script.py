@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # -*- coding: utf-8 -*-
 # Execution example : python script.py
 
@@ -187,7 +187,7 @@ def main() :
 #
 if __name__ == '__main__' :
     # Init logs
-    logging.basicConfig(filename = log_file, filemode = 'w', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
+    logging.basicConfig(filename = log_file, filemode = 'a', format = '%(asctime)s  |  %(levelname)s  |  %(message)s', datefmt = '%m/%d/%Y %I:%M:%S %p', level = log_level)
     logging.info('Start')
     main()
     logging.info('End')
