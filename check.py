@@ -20,6 +20,7 @@ import vimeo
 log_file = 'check.log'
 log_level = logging.DEBUG
 conf_file = 'conf.json'
+result_file = 'check_videos.csv'
 conf = 0
 videos = []
 
@@ -27,8 +28,16 @@ videos = []
 #
 # Functions
 #
+def md5(fname):
+    hash_md5 = hashlib.md5()
+    with open(fname, 'rb') as f:
+        for chunk in iter(lambda: f.read(4096), b''):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
 def write_results(results) :
-    with open('check_videos.csv', 'wb') as csvfile :
+    global result_file
+    with open(result_file, 'wb') as csvfile :
         csv_writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['id', 'name', 'url', 'account', 'video_downloaded', 'metadata_downloaded', 'video_md5_vimeo', 'video_md5_calculated', 'video_integrity'])
         for result in results :
@@ -46,9 +55,17 @@ def check_videos(data) :
         video['video_downloaded'] = (0, 1)[os.path.isfile(conf['download_path_video'] + '/' + video['id'] + '.mp4')]
         logging.info(conf['download_path_video'] + '/' + video['id'] + '.mp4')
         video['metadata_downloaded'] = (0, 1)[os.path.isfile(conf['download_path_metadata'] + '/' + video['id'] + '.json')]
-        video['md5_vimeo'] = videoset['download']['md5']
-        video['md5_calculated'] = hashlib.md5(conf['download_path_video'] + '/' + video['id'] + '.mp4').hexdigest()
-        video['video_integrity'] = (0, 1)[video['md5'] == video['md5_vimeo']]
+        try :
+            video['md5_vimeo'] = videoset['download'][0]['md5']
+        except Exception as e :
+            logging.error('Error while harvesting the md5 for video : ' + video['id']);
+            video['md5_vimeo'] = 'Error : No data about md5 in Vimeo API'
+        if os.path.isfile(conf['download_path_video'] + '/' + video['id'] + '.mp4') :
+            video['md5_calculated'] = md5(conf['download_path_video'] + '/' + video['id'] + '.mp4')
+        else :
+            logging.error('Error : File doesn\'t exists : ' + conf['download_path_video'] + '/' + video['id'] + '.mp4');
+            video['md5_calculated'] = 'Error : File doesn\'t exists.'
+        video['video_integrity'] = (0, 1)[video['md5_calculated'] == video['md5_vimeo']]
         videos.append(video)
     write_results(videos)
 
@@ -82,15 +99,15 @@ def main() :
     if 'authentifications' in conf.keys() :
         logging.info('Authentifications provided')
         # Iterate over all the vimeo accounts
-        # for account in conf['authentifications'] :
-        # Connect to Vimeo account
-        logging.info('Connect to Vimeo account ' + conf['authentifications'][2]['name'] + '.')
-        v = vimeo.VimeoClient(
-            token = conf['authentifications'][2]['token'],
-            key = conf['authentifications'][2]['key'],
-            secret = conf['authentifications'][2]['secret']
-        )
-        check_account(v)
+        for account in conf['authentifications'] :
+            # Connect to Vimeo account
+            logging.info('Connect to Vimeo account ' + account['name'] + '.')
+            v = vimeo.VimeoClient(
+                token = account['token'],
+                key = account['key'],
+                secret = account['secret']
+            )
+            check_account(v)
     else :
         logging.error('Please provide authentification into the conf file !')
         sys.exit(0)
