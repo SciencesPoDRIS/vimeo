@@ -4,7 +4,8 @@
 		"email" : "email_of_your_account",
 		"token" : "paste_your_token_here",
 		"key" : "paste_your_key_here",
-		"secret" : "paste_your_secret_here"
+		"secret" : "paste_your_secret_here",
+		"link" : "paste_the_vimeo_url_of_your_account"
 	}],
 	"download_path_video" : "videos",
 	"download_path_metadata" : "metadata",
