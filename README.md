@@ -1,5 +1,5 @@
 # Vimeo
-Collect metadata and download videos from multiple vimeo accounts.
+Collect metadata and download videos from multiple [Vimeo](https://vimeo.com/) accounts.
 
 
 ## Dependencies
@@ -44,12 +44,33 @@ And `link` should be the vimeo link to this account.
 ## Execution
 `> workon vimeo`
 
-# 
+# Run script to download videos
 `> python script.py`
+
+# Run script to check the quality
+`> python check.py`
 
 
 ## Control quality
+The control quality should be the "check_videos.csv" file.
 
+`id` : Unique identifier of the video. Created by Vimeo.
+
+`name` : Title of the video.
+
+`url` : Url of the video.
+
+`account` : Name of the user account that uploaded the video.
+
+`video_downloaded` : `1` if the video has been downloaded, else `0`.
+
+`metadata_downloaded` : `1` if the metadata file has been dowloaed, else `0`.
+
+`video_md5_vimeo` : MD5 of this video according to Vimeo.
+
+`video_md5_calculated` : MD5 of this video calculated by the script.
+
+`video_integrity` : `1` if `video_md5_vimeo` and `video_md5_calculated` are equals, else `0`.
 
 
 ## Documentation
