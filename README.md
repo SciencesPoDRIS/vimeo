@@ -52,7 +52,7 @@ And `link` should be the vimeo link to this account.
 
 
 ## Control quality
-The control quality should be the "check_videos.csv" file.
+The control quality results should be in the "check_videos.csv" file.
 
 `id` : Unique identifier of the video. Created by Vimeo.
 
