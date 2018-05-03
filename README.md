@@ -29,10 +29,16 @@ You will find your token on the [Vimeo app page](https://developer.vimeo.com/app
 4. Click on "Generate an Access Token"
 
 The "Client Identifier" will be `token`.
+
 The "Client Secrets" will be `key`.
+
 The freshly generated "Token" will be `secret`.
-Additionally, `name` will be the name that you wanna give to this account,
-`email` should be the email address used to log to this accound and `link` should be the vimeo link to this account.
+
+Additionally, `name` will be the name that you wanna give to this account.
+
+`email` should be the email address used to log to this accound.
+
+And `link` should be the vimeo link to this account.
 
 
 ## Execution
