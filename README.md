@@ -44,10 +44,10 @@ And `link` should be the vimeo link to this account.
 ## Execution
 `> workon vimeo`
 
-# Run script to download videos
+### Run script to download videos
 `> python script.py`
 
-# Run script to check the quality
+### Run script to check the quality
 `> python check.py`
 
 
