@@ -42,17 +42,18 @@ And `link` should be the vimeo link to this account.
 
 
 ## Execution
-`> workon vimeo`
 
-### Run script to download videos
+### Run script to download videos and metadata
+`> workon vimeo`
 `> python script.py`
 
+The output will be
+
 ### Run script to check the quality
+`> workon vimeo`
 `> python check.py`
 
-
-## Control quality
-The control quality results should be in the "check_videos.csv" file.
+The output will be a file named "check_videos.csv".
 
 `id` : Unique identifier of the video. Created by Vimeo.
 
@@ -73,12 +74,11 @@ The control quality results should be in the "check_videos.csv" file.
 `video_integrity` : `1` if `video_md5_vimeo` and `video_md5_calculated` are equals, else `0`.
 
 
-## Documentation
-https://developer.vimeo.com/api/start
+## Unseful links
 
+[Vimeo API](https://developer.vimeo.com/api/start)
 
-## Inspiration
-https://github.com/yeeking/vimeo-account-downloader/blob/master/vimeo_backup.py
+[Inspiring project](https://github.com/yeeking/vimeo-account-downloader)
 
 
 ## Credits
