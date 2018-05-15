@@ -8,6 +8,16 @@ Collect metadata and download videos from multiple [Vimeo](https://vimeo.com/) a
 
 
 ## Install
+
+### Code part
+Clone the Github project
+
+`> git clone https://github.com/SciencesPoDRIS/vimeo.git`
+
+Go to the freshly created folder
+
+`> cd vimeo`
+
 Create a dedicated virtualenv
 
 `> mkvirtualenv vimeo`
@@ -19,6 +29,8 @@ Install dependencies
 Copy the default conf file
 
 `> cp conf.default.json conf.json`
+
+### Configuration part
 
 Complete your conf.json file and add as many object as you need.
 You will find your token on the [Vimeo app page](https://developer.vimeo.com/apps/)
@@ -75,6 +87,13 @@ The output will be a file named "check_videos.csv" directly in the project folde
 `video_md5_calculated` : MD5 of this video calculated by the script.
 
 `video_integrity` : `1` if `video_md5_vimeo` and `video_md5_calculated` are equals, else `0`. So `1` means that the video file has been correctly downloaded.
+
+
+## FAQ
+
+### How to set my account to be downloaded ?
+
+Open the conf.json file. Copy / paste an authentifications object. And fill it as explain [here]().
 
 
 ## Unseful links
