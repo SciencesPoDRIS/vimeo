@@ -93,7 +93,9 @@ The output will be a file named "check_videos.csv" directly in the project folde
 
 ### How to set my account to be downloaded ?
 
-Open the conf.json file. Copy / paste an authentifications object. And fill it as explain [here](#configuration-part).
+* Open the conf.json file.
+* Copy / paste an authentifications object.
+* And fill it as explain [here](#configuration-part).
 
 
 ## Unseful links
