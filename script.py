@@ -167,16 +167,16 @@ def main() :
     if 'authentifications' in conf.keys() :
         logging.info('Authentifications provided')
         # Iterate over all the vimeo accounts
-        # for account in conf['authentifications'] :
-        # Connect to Vimeo account
-        logging.info('Connect to Vimeo account ' + conf['authentifications'][2]['name'] + '.')
-        v = vimeo.VimeoClient(
-            token = conf['authentifications'][2]['token'],
-            key = conf['authentifications'][2]['key'],
-            secret = conf['authentifications'][2]['secret']
-        )
-        retrieve_videos(v, conf['authentifications'][2]['link'])
-        logging.info('Total size : ' + str(total_size) + ' octets.')
+        for account in conf['authentifications'] :
+            # Connect to Vimeo account
+            logging.info('Connect to Vimeo account ' + account['name'] + '.')
+            v = vimeo.VimeoClient(
+                token = account['token'],
+                key = account['key'],
+                secret = account['secret']
+            )
+            retrieve_videos(v, account['link'])
+            logging.info('Total size : ' + str(total_size) + ' octets.')
     else :
         logging.error('Please provide authentification into the conf file !')
         sys.exit(0)
