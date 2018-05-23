@@ -8,6 +8,16 @@ Collect metadata and download videos from multiple [Vimeo](https://vimeo.com/) a
 
 
 ## Install
+
+### Code part
+Clone the Github project
+
+`> git clone https://github.com/SciencesPoDRIS/vimeo.git`
+
+Go to the freshly created folder
+
+`> cd vimeo`
+
 Create a dedicated virtualenv
 
 `> mkvirtualenv vimeo`
@@ -19,6 +29,8 @@ Install dependencies
 Copy the default conf file
 
 `> cp conf.default.json conf.json`
+
+### Configuration part
 
 Complete your conf.json file and add as many object as you need.
 You will find your token on the [Vimeo app page](https://developer.vimeo.com/apps/)
@@ -42,25 +54,29 @@ And `link` should be the vimeo link to this account.
 
 
 ## Execution
+
+### Run script to download videos and metadata
 `> workon vimeo`
 
-### Run script to download videos
 `> python script.py`
 
+The output will be 2 folders `vimeo_videos` and `vimeo_metadata`. `vimeo_videos` contains all the downloaded videos whose names are Vimeo identifier and format is MP4. `vimeo_metadata` contains all the downloaded metadata whose names are Vimeo identifier and format is JSON.
+
+
 ### Run script to check the quality
+`> workon vimeo`
+
 `> python check.py`
 
+The output will be a file named "check_videos.csv" directly in the project folder.
 
-## Control quality
-The control quality results should be in the "check_videos.csv" file.
+`id` : Unique Vimeo identifier of the video.
 
-`id` : Unique identifier of the video. Created by Vimeo.
+`name` : Title of the video from Vimeo.
 
-`name` : Title of the video.
+`url` : Url of the video from Vimeo.
 
-`url` : Url of the video.
-
-`account` : Name of the user account that uploaded the video.
+`account` : Name of the user account that uploaded the video from the conf file.
 
 `video_downloaded` : `1` if the video has been downloaded, else `0`.
 
@@ -70,15 +86,23 @@ The control quality results should be in the "check_videos.csv" file.
 
 `video_md5_calculated` : MD5 of this video calculated by the script.
 
-`video_integrity` : `1` if `video_md5_vimeo` and `video_md5_calculated` are equals, else `0`.
+`video_integrity` : `1` if `video_md5_vimeo` and `video_md5_calculated` are equals, else `0`. So `1` means that the video file has been correctly downloaded.
 
 
-## Documentation
-https://developer.vimeo.com/api/start
+## FAQ
+
+### How to set my account to be downloaded ?
+
+* Open the conf.json file.
+* Copy / paste an authentifications object.
+* And fill it as explain [here](#configuration-part).
 
 
-## Inspiration
-https://github.com/yeeking/vimeo-account-downloader/blob/master/vimeo_backup.py
+## Unseful links
+
+[Vimeo API](https://developer.vimeo.com/api/start)
+
+[Inspiring project](https://github.com/yeeking/vimeo-account-downloader)
 
 
 ## Credits
